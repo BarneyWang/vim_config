@@ -1,0 +1,142 @@
+" last modified 2018/06/29 by yuqing
+
+"------------------------- Common Setting ------------------------------------
+"NOTE: for win32 users, rather than typing ":help blabla", you can press
+"Shift-K on the keywords below to see the related help topic; but Shift-K
+"will try to open the man page in linux.
+"NOTE: for using variable: http://www.adp-gmbh.ch/vim/vars.html
+set noswapfile
+set nocompatible                            " not compatible with vi
+set modeline
+set nobackup                                " see :help backup-table
+set nowritebackup                           " see :help backup-table
+set ruler                                   " show the cursor position all the time
+set number                                  " line numbers
+set showcmd                                 " display incomplete commands
+set backspace=indent,eol,start              " now we can backspacing over everything
+autocmd FileType text setlocal textwidth=78
+set scrolloff=5                             " 5 lines before and after the current line when scrolling
+set mouse=nvchr                             " enable mouse in xterm for all edit modes except the insert mode, which make right click works as expected paste or context menu,instead of starting a visual selection in insert mode.
+set nocursorcolumn                          " make vim faster
+set nocursorline                            " same as above
+" set mouse=a
+set termencoding=utf-8
+set encoding=utf-8
+
+let mapleader = ','
+let g:mapleader = ','
+"-------------------------- Text Encoding ------------------------------------
+"File encoding guess sequence; place gbk at last.
+set fencs=utf-8,gbk
+"To support utf16(le||be), need iconv.dll and newer libintl.dll.
+"Vim can't detect ms-windows C++ WCHAR(utf16le), you need 'e ++enc=utf16le' to
+"reload the file with that encoding.
+
+"------------------------------- Buffer --------------------------------------
+"NOTE: use :ls to list all buffers; use :bd [N] to delete buffer No.N
+"NOTE: use :bd to shutdown current buffer instead of :q to hide it
+set confirm   " show confirm dialog when the user want to abandon an unsaved buffer
+set hid       " allow hide buffers(no window is displaying that buffer), which have unsaved changes
+set autowrite " autowrite buffer before :make, :tag and some other commands
+"set makeprg=rake
+"------------------------------- History -------------------------------------
+set history=50    "keep 50 lines of command line history
+"When editing a file, always jump to the last known cursor position.
+"Don't do it when the position is invalid or when inside an event handler
+"(happens when dropping a file on gvim).
+"Also don't do it when the mark is in the first line, that is the default
+"position when opening a file.
+autocmd BufReadPost *
+"------------------------------- Search --------------------------------------
+set incsearch   "do incremental searching
+set hlsearch    "highlighting the last used search pattern
+set ignorecase  "ignore case,
+set smartcase   "but don't ignore it, when search string contains uppercase letters
+if has("win32")
+  set grepprg=grep4vim
+  "set grepprg=grep\ -i\ -n\ -H "Use grep.exe from UnixUtils as external grep
+endif
+"---------------------------- color theme ------------------------------------
+syntax on
+"colors zenburn
+set background=dark
+autocmd vimenter * ++nested colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'soft'
+set t_Co=256
+"-------------------------- Common Coding Setting ----------------------------
+filetype indent on
+filetype plugin on
+set expandtab        " expand tab to spaces
+set tabstop=2        " how many spaces that a <Tab> counts for
+set shiftwidth=2     " how many spaces used to indent a new line
+set completeopt=menu " only display popup menu when auto-complete
+set nowrap           " don't wrap by default
+"execute pathogen#infect()
+
+"-------------------------- ALE  ----------------------------
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+
+
+
+"-------------------------- Coding Golang ------------------------------------
+" go-vim plugin specific commands
+" Also run `goimports` on your current file on every save
+" Might be be slow on large codebases, if so, just comment it out
+let g:go_fmt_command = "goimports"
+
+" Status line types/signatures.
+let g:go_auto_type_info = 1
+" let g:go_list_type = "quickfix"
+
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+" map <C-q> :lnext<CR>
+" map <C-w> :lprevious<CR>
+nnoremap <leader>a :cclose<CR>
+nnoremap <leader>o :copen 10<CR>
+nnoremap <leader>e :GoReferrers<CR>
+nnoremap <leader>im :GoImplements<CR>
+nnoremap <leader>c :GoCallers<CR>
+nnoremap <leader>ch :GoChannelPeers<CR>
+nnoremap <leader>d :GoDef<CR>
+#nnoremap <leader>in :GoInfo<CR>
+nnoremap <leader>tf :GoTestFunc -v<CR>
+
+autocmd FileType go nmap <leader>r :GoRun<CR> 
+autocmd FileType go nmap <Leader>i :GoInfo<CR> 
+
+"-------------------------- Plugins  ------------------------------------
+:nnoremap <C-g> :NERDTreeToggle<CR>
+let g:NERDTreeMouseMode=3
+"autocmd vimenter * NERDTree
+nmap <C-t> :TagbarToggle<CR>
+" air-line plugin specific commands
+let g:airline_powerline_fonts = 1
+
+if !exists('g:airline_symbols')
+     let g:airline_symbols = {}
+endif
+" tagbar
+let g:tagbar_width = 50
+let g:tagbar_autopreview = 1
+let g:tagbar_sort = 0
+"autocmd vimenter * Tagbar
+
+"CTRL-S to Save
+inoremap <leader>w <C-O>:update<CR>
+" Macro and definations
+inoremap <C-D> <C-X><C-D>
+" Line
+inoremap <C-L> <C-X><C-L>
+" Tags
+inoremap <C-]> <C-X><C-]>
+" See :set omnifunc?
+inoremap <C-O> <C-X><C-O>
+" See :set completefunc?
+"inoremap <C-O> <C-X><C-U>
+
+"<Del> to delete current to black hole register
+nnoremap <Del> "_dd
+vnoremap <C-y> "+y
+nnoremap <C-p> "*p
