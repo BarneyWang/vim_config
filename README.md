@@ -20,3 +20,6 @@
       - linux : sudo apt install universal-ctags
       - mac  : sudo brew install universal-ctags
     - git clone https://github.com/preservim/tagbar  ~/.vim/pack/dist/start/ 
+  - ultisnips
+    - git clone https://github.com/SirVer/ultisnips.git ~/.vim/plugins/start/
+    - snippets list : https://github.com/fatih/vim-go/blob/master/gosnippets/UltiSnips/go.snippets
